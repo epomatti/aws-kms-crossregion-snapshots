@@ -13,7 +13,7 @@ To created a copy of the snapshot to the secondary region, run the copy command 
 
 ```sh
 aws ec2 copy-snapshot \
-	  --region sa-east-1 \
+    --region sa-east-1 \
     --source-region us-east-2 \
     --source-snapshot-id snap-00000000000000000 \
     --encrypted \
