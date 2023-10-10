@@ -25,6 +25,16 @@ module "kms" {
   source = "./modules/kms"
 }
 
+module "kms_secondary" {
+  source               = "./modules/kms-secondary"
+  aws_secondary_region = var.aws_secondary_region
+}
+
+module "ebs" {
+  source      = "./modules/ebs"
+  kms_key_arn = module.kms.kms_key_arn
+}
+
 module "aurora" {
   source      = "./modules/rds"
   workload    = local.workload
