@@ -1,6 +1,6 @@
 provider "aws" {
   region = var.aws_secondary_region
-  alias  = "failover"
+  alias  = "secondary"
 }
 
 data "aws_caller_identity" "current" {}
@@ -15,15 +15,20 @@ locals {
 resource "aws_kms_key" "default" {
   description             = "Cross-region snapshots - Secondary"
   deletion_window_in_days = 7
+
+  provider = aws.secondary
 }
 
 resource "aws_kms_alias" "default" {
   name          = "alias/region2key"
   target_key_id = aws_kms_key.default.key_id
+
+  provider = aws.secondary
 }
 
 resource "aws_kms_key_policy" "default" {
-  key_id = aws_kms_key.default.id
+  key_id   = aws_kms_key.default.id
+  provider = aws.secondary
 
   policy = jsonencode({
     Version = "2012-10-17"
